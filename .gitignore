@@ -1,0 +1,58 @@
+# RAD Studio / C++ Builder
+*.tds
+*.obj
+*.pch
+*.ilc
+*.ild
+*.ilf
+*.ils
+*.map
+*.pdi
+*.res
+*.exe
+*.dll
+*.bpl
+*.dcu
+*.~*
+*.local
+
+# Build directories
+Win32/
+Win64/
+__history/
+__recovery/
+
+# IDE files
+*.cbproj.local
+*.dsk
+*.dproj.local
+*.identcache
+*.stat
+
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Backup files
+*.bak
+*.swp
+*~
+
+# Log files
+*.log
+
+# Temporary files
+*.tmp
+*.temp
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Visual Studio (if used)
+.vs/
+*.vcxproj.user
+
