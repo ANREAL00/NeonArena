@@ -1,4 +1,4 @@
-﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
         <ProjectGuid>{D7F3E209-0073-4EEA-B0D2-A4BC0E46ADB7}</ProjectGuid>
         <ProjectVersion>20.1</ProjectVersion>
@@ -94,8 +94,8 @@
         <Icon_MainIcon>$(BDS)\bin\cbuilder_PROJECTICON.ico</Icon_MainIcon>
         <UWP_CppLogo44>$(BDS)\bin\Artwork\Windows\UWP\cppreg_UwpDefault_44.png</UWP_CppLogo44>
         <UWP_CppLogo150>$(BDS)\bin\Artwork\Windows\UWP\cppreg_UwpDefault_150.png</UWP_CppLogo150>
-        <IncludePath>C:\Users\ANREAL\Desktop\CourseWork\;$(IncludePath)</IncludePath>
-        <ILINK_LibraryPath>C:\Users\ANREAL\Desktop\CourseWork\;$(ILINK_LibraryPath)</ILINK_LibraryPath>
+        <IncludePath>network\;world\;ui\;entities\;systems\;.\world;.\ui;.\network;.\core;.\entities;.\systems;C:\Users\ANREAL\Desktop\CourseWork\;$(IncludePath)</IncludePath>
+        <ILINK_LibraryPath>network\;world\;ui\;entities\;systems\;C:\Users\ANREAL\Desktop\CourseWork\;$(ILINK_LibraryPath)</ILINK_LibraryPath>
         <SanitizedProjectName>Project1</SanitizedProjectName>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win32)'!=''">
@@ -181,54 +181,86 @@
         <AppDPIAwarenessMode>PerMonitorV2</AppDPIAwarenessMode>
     </PropertyGroup>
     <ItemGroup>
-        <CppCompile Include="GameCamera.cpp">
-            <DependentOn>GameCamera.h</DependentOn>
-            <BuildOrder>14</BuildOrder>
-        </CppCompile>
-        <CppCompile Include="GameEnemy.cpp">
-            <DependentOn>GameEnemy.h</DependentOn>
+        <CppCompile Include="entities\GameEnemy_Base.cpp">
+            <DependentOn>entities\GameEnemy.h</DependentOn>
             <BuildOrder>15</BuildOrder>
         </CppCompile>
-        <CppCompile Include="GameExperience.cpp">
-            <DependentOn>GameExperience.h</DependentOn>
-            <BuildOrder>14</BuildOrder>
-        </CppCompile>
-        <CppCompile Include="GameNetwork.cpp">
-            <DependentOn>GameNetwork.h</DependentOn>
+        <CppCompile Include="entities\GameEnemy_Boss.cpp">
+            <DependentOn>entities\GameEnemy.h</DependentOn>
             <BuildOrder>15</BuildOrder>
         </CppCompile>
-        <CppCompile Include="GamePlayer.cpp">
-            <DependentOn>GamePlayer.h</DependentOn>
+        <CppCompile Include="entities\GameEnemy_Boss_Patterns.cpp">
+            <DependentOn>entities\GameEnemy.h</DependentOn>
             <BuildOrder>15</BuildOrder>
         </CppCompile>
-        <CppCompile Include="GameProjectile.cpp">
-            <DependentOn>GameProjectile.h</DependentOn>
+        <CppCompile Include="entities\GameEnemy_Boss_Render.cpp">
+            <DependentOn>entities\GameEnemy.h</DependentOn>
             <BuildOrder>15</BuildOrder>
         </CppCompile>
-        <CppCompile Include="GameRecords.cpp">
-            <DependentOn>GameRecords.h</DependentOn>
+        <CppCompile Include="entities\GameEnemy_Types_Draw.cpp">
+            <DependentOn>entities\GameEnemy.h</DependentOn>
             <BuildOrder>15</BuildOrder>
         </CppCompile>
-        <CppCompile Include="GameSpawner.cpp">
-            <DependentOn>GameSpawner.h</DependentOn>
+        <CppCompile Include="entities\GameEnemy_Types_Update.cpp">
+            <DependentOn>entities\GameEnemy.h</DependentOn>
             <BuildOrder>15</BuildOrder>
         </CppCompile>
-        <CppCompile Include="GameUIRenderer.cpp">
-            <DependentOn>GameUIRenderer.h</DependentOn>
+        <CppCompile Include="entities\GamePlayer.cpp">
+            <DependentOn>entities\GamePlayer.h</DependentOn>
             <BuildOrder>15</BuildOrder>
         </CppCompile>
-        <CppCompile Include="GameUpgrade.cpp">
-            <DependentOn>GameUpgrade.h</DependentOn>
-            <BuildOrder>12</BuildOrder>
-        </CppCompile>
-        <CppCompile Include="GameWorld.cpp">
-            <DependentOn>GameWorld.h</DependentOn>
-            <BuildOrder>13</BuildOrder>
+        <CppCompile Include="entities\GameProjectile.cpp">
+            <DependentOn>entities\GameProjectile.h</DependentOn>
+            <BuildOrder>15</BuildOrder>
         </CppCompile>
         <CppCompile Include="MainForm.cpp">
             <Form>Form1</Form>
             <FormType>dfm</FormType>
             <DependentOn>MainForm.h</DependentOn>
+            <BuildOrder>15</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="MainForm_GameLoop.cpp">
+            <DependentOn>MainForm.h</DependentOn>
+            <BuildOrder>15</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="MainForm_Input.cpp">
+            <DependentOn>MainForm.h</DependentOn>
+            <BuildOrder>15</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="MainForm_Network.cpp">
+            <DependentOn>MainForm.h</DependentOn>
+            <BuildOrder>15</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="network\GameNetwork_Client.cpp">
+            <DependentOn>network\GameNetwork.h</DependentOn>
+            <BuildOrder>15</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="network\GameNetwork_Host.cpp">
+            <DependentOn>network\GameNetwork.h</DependentOn>
+            <BuildOrder>15</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="network\GameNetwork_Manager.cpp">
+            <DependentOn>network\GameNetwork.h</DependentOn>
+            <BuildOrder>15</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="network\GameNetwork_Packets.cpp">
+            <DependentOn>network\GameNetwork.h</DependentOn>
+            <BuildOrder>15</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="network\GameNetwork_Serialization.cpp">
+            <DependentOn>network\GameNetwork.h</DependentOn>
+            <BuildOrder>15</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="network\GameNetwork_Update.cpp">
+            <DependentOn>network\GameNetwork.h</DependentOn>
+            <BuildOrder>15</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="network\GameNetwork_ValidateReconnect.cpp">
+            <DependentOn>network\GameNetwork.h</DependentOn>
+            <BuildOrder>15</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="network\GameNetwork_WinSock.cpp">
+            <DependentOn>network\GameNetwork.h</DependentOn>
             <BuildOrder>15</BuildOrder>
         </CppCompile>
         <CppCompile Include="Project1.cpp">
@@ -238,9 +270,93 @@
             <BuildOrder>1</BuildOrder>
             <PCH>true</PCH>
         </PCHCompile>
-        <CppCompile Include="WaveManager.cpp">
-            <DependentOn>WaveManager.h</DependentOn>
+        <CppCompile Include="systems\GameCamera.cpp">
+            <DependentOn>systems\GameCamera.h</DependentOn>
+            <BuildOrder>14</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="systems\GameExperience.cpp">
+            <DependentOn>systems\GameExperience.h</DependentOn>
+            <BuildOrder>14</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="systems\GameRecords.cpp">
+            <DependentOn>systems\GameRecords.h</DependentOn>
+            <BuildOrder>15</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="systems\GameSpawner.cpp">
+            <DependentOn>systems\GameSpawner.h</DependentOn>
+            <BuildOrder>15</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="systems\GameUpgrade.cpp">
+            <DependentOn>systems\GameUpgrade.h</DependentOn>
+            <BuildOrder>12</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="systems\WaveManager.cpp">
+            <DependentOn>systems\WaveManager.h</DependentOn>
             <BuildOrder>8</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="ui\GameUIRenderer_Hud.cpp">
+            <DependentOn>ui\GameUIRenderer.h</DependentOn>
+            <BuildOrder>15</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="ui\GameUIRenderer_Menus.cpp">
+            <DependentOn>ui\GameUIRenderer.h</DependentOn>
+            <BuildOrder>15</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="ui\GameUIRenderer_Minimap.cpp">
+            <DependentOn>ui\GameUIRenderer.h</DependentOn>
+            <BuildOrder>15</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="ui\GameUIRenderer_Overlays.cpp">
+            <DependentOn>ui\GameUIRenderer.h</DependentOn>
+            <BuildOrder>15</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="world\GameWorld.cpp">
+            <DependentOn>world\GameWorld.h</DependentOn>
+            <BuildOrder>13</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="world\GameWorld_Accessors.cpp">
+            <DependentOn>world\GameWorld.h</DependentOn>
+            <BuildOrder>13</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="world\GameWorld_Collisions.cpp">
+            <DependentOn>world\GameWorld.h</DependentOn>
+            <BuildOrder>13</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="world\GameWorld_Enemies.cpp">
+            <DependentOn>world\GameWorld.h</DependentOn>
+            <BuildOrder>13</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="world\GameWorld_Experience.cpp">
+            <DependentOn>world\GameWorld.h</DependentOn>
+            <BuildOrder>13</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="world\GameWorld_GenerateUpgrades.cpp">
+            <DependentOn>world\GameWorld.h</DependentOn>
+            <BuildOrder>13</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="world\GameWorld_NetworkSync.cpp">
+            <DependentOn>world\GameWorld.h</DependentOn>
+            <BuildOrder>13</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="world\GameWorld_NetworkEnemies.cpp">
+            <DependentOn>world\GameWorld.h</DependentOn>
+            <BuildOrder>13</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="world\GameWorld_Render.cpp">
+            <DependentOn>world\GameWorld.h</DependentOn>
+            <BuildOrder>13</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="world\GameWorld_Shooting.cpp">
+            <DependentOn>world\GameWorld.h</DependentOn>
+            <BuildOrder>13</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="world\GameWorld_Spawning.cpp">
+            <DependentOn>world\GameWorld.h</DependentOn>
+            <BuildOrder>13</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="world\GameWorld_Upgrades.cpp">
+            <DependentOn>world\GameWorld.h</DependentOn>
+            <BuildOrder>13</BuildOrder>
         </CppCompile>
         <FormResources Include="MainForm.dfm"/>
         <BuildConfiguration Include="Base">
