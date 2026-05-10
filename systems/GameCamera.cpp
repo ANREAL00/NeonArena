@@ -1,12 +1,10 @@
 #include <vcl.h>
 #pragma hdrstop
 
-
 #include "GameCamera.h"
-#include "GameConstants.h"
+#include "core\GameConstants.h"
 #include <algorithm>
 #include <cmath>
-
 
 TGameCamera::TGameCamera()
 	: Position(PointF(0.0f, 0.0f)),
@@ -23,19 +21,17 @@ void TGameCamera::Update(float deltaTime, const TPointF &targetPosition,
 {
 	WorldWidth = worldWidth;
 	WorldHeight = worldHeight;
-	
-	
+
 	if (ShakeTimer > 0.0f)
 	{
 		ShakeTimer -= deltaTime;
 		if (ShakeTimer < 0.0f)
 			ShakeTimer = 0.0f;
-		
-		
+
 		const float angle = Random(360) * 3.14159265f / 180.0f;
 		const float maxDuration = 0.2f;
 		const float progress = ShakeTimer / maxDuration;
-		const float distance = ShakeIntensity * progress; 
+		const float distance = ShakeIntensity * progress;
 		ShakeOffset.X = std::cos(angle) * distance;
 		ShakeOffset.Y = std::sin(angle) * distance;
 	}
@@ -45,11 +41,9 @@ void TGameCamera::Update(float deltaTime, const TPointF &targetPosition,
 		ShakeIntensity = 0.0f;
 	}
 
-	
 	float camX = targetPosition.X - canvasWidth / 2.0f;
 	float camY = targetPosition.Y - canvasHeight / 2.0f;
 
-	
 	camX = std::clamp(camX, 0.0f, std::max(0.0f, WorldWidth - static_cast<float>(canvasWidth)));
 	camY = std::clamp(camY, 0.0f, std::max(0.0f, WorldHeight - static_cast<float>(canvasHeight)));
 
@@ -85,7 +79,3 @@ void TGameCamera::Reset()
 	ShakeIntensity = 0.0f;
 	ShakeOffset = PointF(0.0f, 0.0f);
 }
-
-
-
-

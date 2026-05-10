@@ -1,15 +1,13 @@
 
 
-
 #ifndef GameUIRendererH
 #define GameUIRendererH
-
 
 #include <System.Types.hpp>
 #include <Vcl.Graphics.hpp>
 #include <vector>
 #include <algorithm>
-#include "GameRecords.h"
+#include "systems\\GameRecords.h"
 
 struct TGameStats
 {
@@ -34,7 +32,7 @@ struct TPlayerStats
 	float AltBulletSpeedMultiplier;
 	float SpeedMultiplier;
 	float ExperienceGainMultiplier;
-	
+
 	float HealthRegenPerWave;
 	float CriticalChancePercent;
 	float DamageReductionPercent;
@@ -42,7 +40,7 @@ struct TPlayerStats
 	float LifestealChancePercent;
 };
 
-struct TUpgrade; 
+struct TUpgrade;
 
 struct TGameUIState
 {
@@ -53,29 +51,24 @@ struct TGameUIState
 	bool RestartButtonHover;
 	bool MenuButtonHover;
 
-	
-	std::vector<TRect> UpgradeButtonRects; 
-	std::vector<bool> UpgradeButtonHovers; 
-	std::vector<float> UpgradeButtonHoverTime; 
-	
-	
+	std::vector<TRect> UpgradeButtonRects;
+	std::vector<bool> UpgradeButtonHovers;
+	std::vector<float> UpgradeButtonHoverTime;
+
 	TRect StartButtonRect;
 	TRect ExitButtonRect;
-	TRect CoopButtonRect; 
+	TRect CoopButtonRect;
 	bool StartButtonHover;
 	bool ExitButtonHover;
-	bool CoopButtonHover; 
-	
-	
+	bool CoopButtonHover;
+
 	TRect ResumeButtonRect;
 	TRect PauseMenuButtonRect;
 	bool ResumeButtonHover;
 	bool PauseMenuButtonHover;
-	
-	
-	bool ShowStatsPanel; 
-	
-	
+
+	bool ShowStatsPanel;
+
 	TRect CreateGameButtonRect;
 	TRect JoinGameButtonRect;
 	TRect BackButtonRect;
@@ -85,37 +78,36 @@ struct TGameUIState
 	bool JoinGameButtonHover;
 	bool BackButtonHover;
 	bool StartGameButtonHover;
-	std::string IPAddress; 
+	std::string IPAddress;
 	bool IPInputFocused;
-	std::vector<std::string> PlayerNames; 
-	std::vector<bool> PlayerReady; 
+	std::vector<std::string> PlayerNames;
+	std::vector<bool> PlayerReady;
 };
 
 class TGameUIRenderer
 {
 private:
-	
+
 	static constexpr int BaseWidth = 1920;
 	static constexpr int BaseHeight = 1080;
-	
-	
+
 	float GetScaleX(int canvasWidth) const { return static_cast<float>(canvasWidth) / static_cast<float>(BaseWidth); }
 	float GetScaleY(int canvasHeight) const { return static_cast<float>(canvasHeight) / static_cast<float>(BaseHeight); }
-	float GetScale(int canvasWidth, int canvasHeight) const 
-	{ 
-		
+	float GetScale(int canvasWidth, int canvasHeight) const
+	{
+
 		return std::min(GetScaleX(canvasWidth), GetScaleY(canvasHeight));
 	}
 	int ScaleFontSize(int baseSize, int canvasWidth, int canvasHeight) const
 	{
 		const float scale = GetScale(canvasWidth, canvasHeight);
 		int size = static_cast<int>(baseSize * scale);
-		
+
 		if (scale > 1.5f)
 			size = static_cast<int>(baseSize * (1.0f + (scale - 1.0f) * 0.6f));
 		else if (scale < 0.75f)
 			size = static_cast<int>(baseSize * (0.75f + (scale - 0.75f) * 0.8f));
-		
+
 		size = std::clamp(size, 10, 48);
 		return size;
 	}
@@ -127,7 +119,7 @@ private:
 	{
 		return baseValue * GetScale(canvasWidth, canvasHeight);
 	}
-	
+
 public:
 	void DrawHud(TCanvas *canvas,
 		float healthRatio, int health, int maxHealth,
@@ -151,10 +143,10 @@ public:
 	void DrawBossHealthBar(TCanvas *canvas, float healthRatio, int health, int maxHealth) const;
 	void DrawMainMenu(TCanvas *canvas, const TGameRecords &records, TGameUIState &uiState) const;
 	void DrawPauseMenu(TCanvas *canvas, TGameUIState &uiState) const;
-	void DrawCoopMenu(TCanvas *canvas, TGameUIState &uiState, 
-	                  const void *networkManager) const; 
+	void DrawCoopMenu(TCanvas *canvas, TGameUIState &uiState,
+	                  const void *networkManager) const;
 	void DrawCooldownIndicators(TCanvas *canvas, float primaryCooldown, float altCooldown, float primaryMax, float altMax) const;
-	void DrawMinimap(TCanvas *canvas, 
+	void DrawMinimap(TCanvas *canvas,
 		const TPointF &playerPos,
 		const std::vector<TPointF> &enemyPositions,
 		const TPointF &bossPos,
@@ -171,7 +163,4 @@ public:
 	                    const TPointF &cameraPos, uint8_t localPlayerID) const;
 };
 
-
 #endif
-
-

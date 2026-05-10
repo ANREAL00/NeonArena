@@ -6,8 +6,8 @@
 #include <memory>
 #include <vector>
 
-#include "GameUpgrade.h"
-#include "GamePlayer.h"
+#include "systems\\GameUpgrade.h"
+#include "entities\\GamePlayer.h"
 
 namespace NeonGameWorldUtils
 {
@@ -56,4 +56,3 @@ namespace NeonGameWorldUtils
 }
 
 #endif
-

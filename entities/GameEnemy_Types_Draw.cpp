@@ -2,7 +2,7 @@
 #pragma hdrstop
 
 #include "GameEnemy.h"
-#include "GameConstants.h"
+#include "core\GameConstants.h"
 #include <Windows.h>
 #include <cmath>
 

@@ -2,7 +2,7 @@
 #pragma hdrstop
 
 #include "GameWorld.h"
-#include "GameConstants.h"
+#include "core\GameConstants.h"
 
 using namespace NeonGame;
 

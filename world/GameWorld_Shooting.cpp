@@ -119,4 +119,3 @@ void TGameWorld::UpdateShootingForPlayer(uint8_t playerID, float deltaTime, cons
 		aTimer = effectiveAltFireCooldown;
 	}
 }
-

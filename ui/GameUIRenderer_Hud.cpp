@@ -28,8 +28,6 @@ void TGameUIRenderer::DrawHud(TCanvas *canvas,
 	const int barY = ScaleValue(16, width, height);
 	const int barSpacing = ScaleValue(28, width, height);
 
-	canvas->Font->Name = "Segoe UI";
-
 	const int topY = ScaleValue(16, width, height);
 	canvas->Font->Size = ScaleFontSize(16, width, height);
 	canvas->Font->Color = static_cast<TColor>(RGB(200, 200, 220));

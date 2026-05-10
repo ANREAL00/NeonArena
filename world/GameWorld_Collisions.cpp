@@ -5,6 +5,12 @@
 #include "GameWorld_Utils.h"
 #include <algorithm>
 
+static bool RollChance(float chance)
+{
+	return chance > 0.0f &&
+		(static_cast<float>(rand()) / static_cast<float>(RAND_MAX)) < chance;
+}
+
 using namespace NeonGame;
 
 void TGameWorld::UpdateCollisions()
@@ -160,24 +166,18 @@ void TGameWorld::UpdateCollisions()
 			if (dx * dx + dy * dy <= hitRadiusSq)
 			{
 				int damage = b.GetDamage();
-				const float critChance = UpgradeManager.GetCriticalChancePercent() / 100.0f;
-				if (critChance > 0.0f && (static_cast<float>(rand()) / static_cast<float>(RAND_MAX)) < critChance)
-				{
+				if (RollChance(UpgradeManager.GetCriticalChancePercent() / 100.0f))
 					damage *= 2;
-				}
 				Boss->ApplyDamage(damage);
 				b.MarkAsUsed();
 
 				Camera.AddShake(3.0f, 0.1f);
 				if (!Boss->IsAlive())
 				{
-					const float lifestealChance = UpgradeManager.GetLifestealChancePercent() / 100.0f;
-					if (lifestealChance > 0.0f && lifestealRecipient && lifestealRecipient->IsAlive())
+					if (lifestealRecipient && lifestealRecipient->IsAlive() &&
+						RollChance(UpgradeManager.GetLifestealChancePercent() / 100.0f))
 					{
-						if ((static_cast<float>(rand()) / static_cast<float>(RAND_MAX)) < lifestealChance)
-						{
-							lifestealRecipient->Heal(5);
-						}
+						lifestealRecipient->Heal(5);
 					}
 
 					const int expValue = 100;
@@ -290,11 +290,8 @@ void TGameWorld::UpdateCollisions()
 			if (dx * dx + dy * dy <= hitRadiusSq)
 			{
 				int damage = b.GetDamage();
-				const float critChance = UpgradeManager.GetCriticalChancePercent() / 100.0f;
-				if (critChance > 0.0f && (static_cast<float>(rand()) / static_cast<float>(RAND_MAX)) < critChance)
-				{
+				if (RollChance(UpgradeManager.GetCriticalChancePercent() / 100.0f))
 					damage *= 2;
-				}
 				e->ApplyDamage(damage);
 				if (!hasPierce)
 				{
@@ -315,13 +312,10 @@ void TGameWorld::UpdateCollisions()
 				{
 					Stats.EnemiesDefeated++;
 
-					const float lifestealChance = UpgradeManager.GetLifestealChancePercent() / 100.0f;
-					if (lifestealChance > 0.0f && lifestealRecipient && lifestealRecipient->IsAlive())
+					if (lifestealRecipient && lifestealRecipient->IsAlive() &&
+						RollChance(UpgradeManager.GetLifestealChancePercent() / 100.0f))
 					{
-						if ((static_cast<float>(rand()) / static_cast<float>(RAND_MAX)) < lifestealChance)
-						{
-							lifestealRecipient->Heal(5);
-						}
+						lifestealRecipient->Heal(5);
 					}
 
 					const int expValue = 10;

@@ -4,10 +4,10 @@
 enum class EWorldState
 {
 	MainMenu,
-	CoopMenu, 
+	CoopMenu,
 	Playing,
 	Paused,
-	ChoosingUpgrade, 
+	ChoosingUpgrade,
 	GameOver
 };
 

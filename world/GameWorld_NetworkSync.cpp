@@ -3,7 +3,7 @@
 
 #include "GameWorld.h"
 #include "GameWorld_Utils.h"
-#include "GameConstants.h"
+#include "core\GameConstants.h"
 #include <algorithm>
 #include <cmath>
 
@@ -343,4 +343,3 @@ void TGameWorld::Update(float deltaTime, const std::vector<TInputState> &inputs,
 	}
 	UpdateThrownProjectiles(deltaTime);
 }
-

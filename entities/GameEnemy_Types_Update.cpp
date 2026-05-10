@@ -2,7 +2,7 @@
 #pragma hdrstop
 
 #include "GameEnemy.h"
-#include "GameConstants.h"
+#include "core\GameConstants.h"
 #include "GameProjectile.h"
 #include <algorithm>
 #include <cmath>
@@ -21,15 +21,7 @@ TBasicEnemy::TBasicEnemy(const TPointF &spawnPos)
 
 void TBasicEnemy::Update(float deltaTime, const TPointF &playerPos)
 {
-	TPointF dir(playerPos.X - position.X, playerPos.Y - position.Y);
-	const float len = std::sqrt(dir.X * dir.X + dir.Y * dir.Y);
-	if (len > 0.001f)
-	{
-		dir.X /= len;
-		dir.Y /= len;
-		position.X += dir.X * speed * deltaTime;
-		position.Y += dir.Y * speed * deltaTime;
-	}
+	MoveTowards(playerPos, speed, deltaTime);
 }
 
 TFastEnemy::TFastEnemy(const TPointF &spawnPos)
@@ -44,15 +36,7 @@ TFastEnemy::TFastEnemy(const TPointF &spawnPos)
 
 void TFastEnemy::Update(float deltaTime, const TPointF &playerPos)
 {
-	TPointF dir(playerPos.X - position.X, playerPos.Y - position.Y);
-	const float len = std::sqrt(dir.X * dir.X + dir.Y * dir.Y);
-	if (len > 0.001f)
-	{
-		dir.X /= len;
-		dir.Y /= len;
-		position.X += dir.X * speed * deltaTime;
-		position.Y += dir.Y * speed * deltaTime;
-	}
+	MoveTowards(playerPos, speed, deltaTime);
 }
 
 TThrowerEnemy::TThrowerEnemy(const TPointF &spawnPos)
@@ -70,16 +54,7 @@ TThrowerEnemy::TThrowerEnemy(const TPointF &spawnPos)
 void TThrowerEnemy::Update(float deltaTime, const TPointF &playerPos)
 {
 	throwTimer -= deltaTime;
-
-	TPointF dir(playerPos.X - position.X, playerPos.Y - position.Y);
-	const float len = std::sqrt(dir.X * dir.X + dir.Y * dir.Y);
-	if (len > 0.001f)
-	{
-		dir.X /= len;
-		dir.Y /= len;
-		position.X += dir.X * speed * deltaTime;
-		position.Y += dir.Y * speed * deltaTime;
-	}
+	MoveTowards(playerPos, speed, deltaTime);
 }
 
 TZigzagEnemy::TZigzagEnemy(const TPointF &spawnPos)
@@ -140,17 +115,8 @@ void TZigzagEnemy::Update(float deltaTime, const TPointF &playerPos)
 		}
 	}
 
-	TPointF dir(playerPos.X - position.X, playerPos.Y - position.Y);
-	const float len = std::sqrt(dir.X * dir.X + dir.Y * dir.Y);
-	if (len > 0.001f)
-	{
-		dir.X /= len;
-		dir.Y /= len;
-
-		const float moveSpeed = isBlinking ? speed * 0.3f : speed;
-		position.X += dir.X * moveSpeed * deltaTime;
-		position.Y += dir.Y * moveSpeed * deltaTime;
-	}
+	const float moveSpeed = isBlinking ? speed * 0.3f : speed;
+	MoveTowards(playerPos, moveSpeed, deltaTime);
 }
 
 TKamikazeEnemy::TKamikazeEnemy(const TPointF &spawnPos)
@@ -165,15 +131,7 @@ TKamikazeEnemy::TKamikazeEnemy(const TPointF &spawnPos)
 
 void TKamikazeEnemy::Update(float deltaTime, const TPointF &playerPos)
 {
-	TPointF dir(playerPos.X - position.X, playerPos.Y - position.Y);
-	const float len = std::sqrt(dir.X * dir.X + dir.Y * dir.Y);
-	if (len > 0.001f)
-	{
-		dir.X /= len;
-		dir.Y /= len;
-		position.X += dir.X * speed * deltaTime;
-		position.Y += dir.Y * speed * deltaTime;
-	}
+	MoveTowards(playerPos, speed, deltaTime);
 }
 
 TShootingEnemy::TShootingEnemy(const TPointF &spawnPos)
@@ -191,14 +149,5 @@ TShootingEnemy::TShootingEnemy(const TPointF &spawnPos)
 void TShootingEnemy::Update(float deltaTime, const TPointF &playerPos)
 {
 	shootTimer -= deltaTime;
-
-	TPointF dir(playerPos.X - position.X, playerPos.Y - position.Y);
-	const float len = std::sqrt(dir.X * dir.X + dir.Y * dir.Y);
-	if (len > 0.001f)
-	{
-		dir.X /= len;
-		dir.Y /= len;
-		position.X += dir.X * speed * deltaTime;
-		position.Y += dir.Y * speed * deltaTime;
-	}
+	MoveTowards(playerPos, speed, deltaTime);
 }

@@ -1,9 +1,7 @@
 
 
-
 #ifndef GameExperienceH
 #define GameExperienceH
-
 
 #include <System.Types.hpp>
 #include <Vcl.Graphics.hpp>
@@ -32,7 +30,4 @@ public:
 	bool CheckPickup(const TPointF &playerPos, float playerRadius) const;
 };
 
-
 #endif
-
-

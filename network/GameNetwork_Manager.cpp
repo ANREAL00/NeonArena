@@ -282,4 +282,3 @@ bool TNetworkManager::ConsumePendingReturnToLobby()
 	return true;
 }
 }
-

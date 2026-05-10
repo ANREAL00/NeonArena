@@ -61,7 +61,7 @@ void TWaveManager::Update(float deltaTime, int &enemiesAlive)
 	{
 		case EWaveState::Waiting:
 		{
-			
+
 			WaveCooldownTimer -= deltaTime;
 			if (WaveCooldownTimer <= 0.0f)
 			{
@@ -72,23 +72,21 @@ void TWaveManager::Update(float deltaTime, int &enemiesAlive)
 
 		case EWaveState::Spawning:
 		{
-			
+
 			if (CurrentWaveConfig.WaveStartDelay > 0.0f)
 			{
 				CurrentWaveConfig.WaveStartDelay -= deltaTime;
-				
+
 			}
 
-			
 			if (CurrentWaveConfig.WaveStartDelay <= 0.0f)
 			{
 				CurrentWaveConfig.TimeUntilNextSpawn -= deltaTime;
-				
-				
+
 				if (CurrentWaveConfig.EnemiesSpawned >= CurrentWaveConfig.TotalEnemies)
 				{
 					WaveState = EWaveState::Active;
-					WaveActiveDuration = 0.0f; 
+					WaveActiveDuration = 0.0f;
 				}
 			}
 			break;
@@ -97,12 +95,11 @@ void TWaveManager::Update(float deltaTime, int &enemiesAlive)
 		case EWaveState::Active:
 		{
 			WaveActiveDuration += deltaTime;
-			
-			
+
 			if (WaveActiveDuration > WaveDurationThreshold)
 			{
 				const float excessTime = WaveActiveDuration - WaveDurationThreshold;
-				
+
 				SpeedMultiplier = 1.0f + (excessTime * MultiplierGrowthRate);
 				DamageMultiplier = 1.0f + (excessTime * MultiplierGrowthRate);
 			}
@@ -111,17 +108,16 @@ void TWaveManager::Update(float deltaTime, int &enemiesAlive)
 				SpeedMultiplier = 1.0f;
 				DamageMultiplier = 1.0f;
 			}
-			
-			
+
 			if (enemiesAlive == 0 && CurrentWaveConfig.EnemiesSpawned >= CurrentWaveConfig.TotalEnemies)
 			{
 				WaveState = EWaveState::Completed;
-				WaveCooldownTimer = IntermissionSeconds; 
-				
+				WaveCooldownTimer = IntermissionSeconds;
+
 				WaveActiveDuration = 0.0f;
 				SpeedMultiplier = 1.0f;
 				DamageMultiplier = 1.0f;
-				
+
 			}
 			break;
 		}
@@ -155,7 +151,7 @@ bool TWaveManager::ShouldSpawnEnemy() const
 void TWaveManager::OnEnemySpawned()
 {
 	CurrentWaveConfig.EnemiesSpawned++;
-	
+
 	CurrentWaveConfig.TimeUntilNextSpawn = CurrentWaveConfig.SpawnInterval;
 }
 
@@ -165,7 +161,7 @@ void TWaveManager::StartNextWave()
 	CalculateWaveConfig(CurrentWave, CurrentWaveConfig);
 	WaveState = EWaveState::Spawning;
 	WaveCooldownTimer = 0.0f;
-	
+
 	WaveActiveDuration = 0.0f;
 	SpeedMultiplier = 1.0f;
 	DamageMultiplier = 1.0f;

@@ -64,4 +64,3 @@ void TGameWorld::SelectUpgrade(int index, uint8_t playerID)
 		}
 	}
 }
-

@@ -3,7 +3,6 @@
 #include <tchar.h>
 
 USEFORM("MainForm.cpp", Form1);
-
 int WINAPI _tWinMain(HINSTANCE, HINSTANCE, LPTSTR, int)
 {
 	try
@@ -30,4 +29,3 @@ int WINAPI _tWinMain(HINSTANCE, HINSTANCE, LPTSTR, int)
 	}
 	return 0;
 }
-

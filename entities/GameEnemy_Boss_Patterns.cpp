@@ -2,7 +2,7 @@
 #pragma hdrstop
 
 #include "GameEnemy.h"
-#include "GameConstants.h"
+#include "core\GameConstants.h"
 #include "GameProjectile.h"
 #include <cmath>
 #include <vector>
@@ -193,4 +193,3 @@ void TBossEnemy::ShootAggressivePattern(const TPointF &playerPos, std::vector<TB
 		}
 	}
 }
-

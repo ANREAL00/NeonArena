@@ -37,7 +37,7 @@ void TForm1::ResetGame()
 	UIState.JoinGameButtonHover = false;
 	UIState.BackButtonHover = false;
 	UIState.StartGameButtonHover = false;
-	
+
 	UIState.IPAddress.clear();
 	UIState.IPInputFocused = false;
 	UIState.PlayerNames.clear();
@@ -285,4 +285,3 @@ void __fastcall TForm1::GameTimerTimer(TObject *Sender)
 	UpdateGame(deltaSeconds);
 	GameCanvas->Repaint();
 }
-

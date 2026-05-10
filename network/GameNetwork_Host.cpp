@@ -12,19 +12,19 @@ namespace NeonGame
 {
 namespace
 {
+static CRITICAL_SECTION s_HostLogCs;
+
+static BOOL CALLBACK InitHostLogCs(PINIT_ONCE, PVOID, PVOID*)
+{
+	InitializeCriticalSection(&s_HostLogCs);
+	return TRUE;
+}
+
 CRITICAL_SECTION& NetLogCs()
 {
 	static INIT_ONCE once = INIT_ONCE_STATIC_INIT;
-	static CRITICAL_SECTION cs;
-	InitOnceExecuteOnce(
-		&once,
-		[](PINIT_ONCE, PVOID, PVOID*) -> BOOL {
-			InitializeCriticalSection(&cs);
-			return TRUE;
-		},
-		nullptr,
-		nullptr);
-	return cs;
+	InitOnceExecuteOnce(&once, InitHostLogCs, nullptr, nullptr);
+	return s_HostLogCs;
 }
 
 void NetLogAppendLine(const char* line)
@@ -80,7 +80,7 @@ void NetLogWrite(const char* fmt, ...)
 	NetLogWriteV(fmt, args);
 	va_end(args);
 }
-} 
+}
 
 void TNetworkManager::AcceptNewConnection()
 {
@@ -97,11 +97,9 @@ void TNetworkManager::AcceptNewConnection()
 		u_long mode = 1;
 		ioctlsocket(clientSocket, FIONBIO, &mode);
 
-		
 		int flag = 1;
 		setsockopt(clientSocket, IPPROTO_TCP, TCP_NODELAY, reinterpret_cast<const char*>(&flag), sizeof(flag));
 
-		
 		int bufSize = 256 * 1024;
 		setsockopt(clientSocket, SOL_SOCKET, SO_SNDBUF, reinterpret_cast<const char*>(&bufSize), sizeof(bufSize));
 		setsockopt(clientSocket, SOL_SOCKET, SO_RCVBUF, reinterpret_cast<const char*>(&bufSize), sizeof(bufSize));

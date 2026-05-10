@@ -1,9 +1,7 @@
 
 
-
 #ifndef GamePlayerH
 #define GamePlayerH
-
 
 #include <System.Types.hpp>
 #include <Vcl.Graphics.hpp>
@@ -17,10 +15,9 @@ private:
 	int health;
 	int maxHealth;
 	TPointF facingDirection;
-	float hitInvulnTimer; 
-	float levelUpInvulnTimer; 
+	float hitInvulnTimer;
+	float levelUpInvulnTimer;
 
-	
 	int level;
 	int experience;
 	int experienceToNextLevel;
@@ -43,12 +40,11 @@ public:
 	void SetFacingDirection(const TPointF &dir);
 	TPointF GetFacingDirection() const { return facingDirection; }
 
-	
 	void TakeDamage(int amount);
 	void Heal(int amount);
-	
+
 	void NetworkRespawn(float centerX, float centerY, int resumeHealth);
-	
+
 	void SyncHealthFromNetwork(int newHealth, int newMaxHealth);
 	bool IsAlive() const;
 	int GetHealth() const { return health; }
@@ -57,26 +53,20 @@ public:
 	bool IsInvulnerable() const { return hitInvulnTimer > 0.0f || levelUpInvulnTimer > 0.0f; }
 	void SetLevelUpInvulnerability(float duration) { levelUpInvulnTimer = duration; }
 
-	
 	void AddExperience(int amount);
 	void ApplyAuthorityProgress(int authLevel, int authExperience);
 	int GetLevel() const { return level; }
 	int GetExperience() const { return experience; }
 	int GetExperienceToNextLevel() const { return experienceToNextLevel; }
 	float GetExperienceRatio() const;
-	bool CheckLevelUp(); 
+	bool CheckLevelUp();
 
-	
 	void ApplySpeedMultiplier(float multiplier);
 	void ApplyMaxHealthBonus(int bonus);
 	float GetBaseSpeed() const { return 260.0f; }
 	float GetCurrentSpeed() const { return speed; }
 
-	
 	void ApplyShotgunRecoil(float aimDirX, float aimDirY);
 };
 
-
 #endif
-
-

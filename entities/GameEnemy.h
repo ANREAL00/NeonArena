@@ -1,12 +1,10 @@
 #ifndef GameEnemyH
 #define GameEnemyH
 
-
 #include <System.Types.hpp>
 #include <Vcl.Graphics.hpp>
 #include <cstdint>
 #include <vector>
-
 
 class TBullet;
 
@@ -20,6 +18,8 @@ protected:
 	int baseHealth;
 	float scaledBaseSpeed;
 	uint32_t netInstanceId = 0;
+
+	void MoveTowards(const TPointF &target, float spd, float dt);
 
 public:
 	virtual ~TEnemy() = default;
@@ -51,7 +51,6 @@ public:
 	void Draw(TCanvas *canvas, const TPointF &camera) const override;
 };
 
-
 class TFastEnemy : public TEnemy
 {
 public:
@@ -59,7 +58,6 @@ public:
 	void Update(float deltaTime, const TPointF &playerPos) override;
 	void Draw(TCanvas *canvas, const TPointF &camera) const override;
 };
-
 
 class TThrowerEnemy : public TEnemy
 {
@@ -75,7 +73,6 @@ public:
 	void ResetThrowTimer() { throwTimer = throwCooldown; }
 };
 
-
 class TZigzagEnemy : public TEnemy
 {
 private:
@@ -90,7 +87,6 @@ public:
 	void Draw(TCanvas *canvas, const TPointF &camera) const override;
 };
 
-
 class TKamikazeEnemy : public TEnemy
 {
 public:
@@ -98,7 +94,6 @@ public:
 	void Update(float deltaTime, const TPointF &playerPos) override;
 	void Draw(TCanvas *canvas, const TPointF &camera) const override;
 };
-
 
 class TShootingEnemy : public TEnemy
 {
@@ -114,7 +109,6 @@ public:
 	void ResetShootTimer() { shootTimer = shootCooldown; }
 };
 
-
 enum class EBossPhase
 {
 	Phase1,  
@@ -123,7 +117,6 @@ enum class EBossPhase
 	Phase4,  
 	Phase5   
 };
-
 
 class TBossEnemy : public TEnemy
 {
@@ -166,7 +159,4 @@ public:
 	bool IsStunned() const { return stunTimer > 0.0f; }
 };
 
-
 #endif
-
-

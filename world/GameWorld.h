@@ -8,37 +8,36 @@
 #include <memory>
 #include <vector>
 
-#include "GamePlayer.h"
-#include "GameProjectile.h"
-#include "GameEnemy.h"
-#include "GameConstants.h"
-#include "GameUIRenderer.h"
-#include "WaveManager.h"
-#include "GameExperience.h"
-#include "GameUpgrade.h"
-#include "GameInput.h"
-#include "GameCamera.h"
-#include "GameState.h"
-#include "GameCollision.h"
-#include "GameSpawner.h"
-#include "GameNetwork.h"
-
+#include "entities\\GamePlayer.h"
+#include "entities\\GameProjectile.h"
+#include "entities\\GameEnemy.h"
+#include "core\\GameConstants.h"
+#include "ui\\GameUIRenderer.h"
+#include "systems\\WaveManager.h"
+#include "systems\\GameExperience.h"
+#include "systems\\GameUpgrade.h"
+#include "core\\GameInput.h"
+#include "systems\\GameCamera.h"
+#include "core\\GameState.h"
+#include "core\\GameCollision.h"
+#include "systems\\GameSpawner.h"
+#include "network\\GameNetwork.h"
 
 class TGameWorld
 {
 private:
-	
-	std::vector<std::unique_ptr<TGamePlayer>> Players; 
-	uint8_t LocalPlayerID; 
-	bool IsNetworkGame; 
-	bool IsServer; 
-	
+
+	std::vector<std::unique_ptr<TGamePlayer>> Players;
+	uint8_t LocalPlayerID;
+	bool IsNetworkGame;
+	bool IsServer;
+
 	std::vector<TBullet> Bullets;
-	std::vector<TBullet> EnemyBullets; 
-	std::vector<TThrownProjectile> ThrownProjectiles; 
-	std::vector<TAcidPool> AcidPools; 
+	std::vector<TBullet> EnemyBullets;
+	std::vector<TThrownProjectile> ThrownProjectiles;
+	std::vector<TAcidPool> AcidPools;
 	std::vector<std::unique_ptr<TEnemy>> Enemies;
-	std::unique_ptr<TBossEnemy> Boss; 
+	std::unique_ptr<TBossEnemy> Boss;
 	std::vector<NeonGame::TBulletNetPacket> ReplicatedBullets;
 	std::vector<TExperienceOrb> ExperienceOrbs;
 	float PrimaryFireCooldown;
@@ -56,33 +55,28 @@ private:
 	TGameStats Stats;
 	EWorldState WorldState;
 	TWaveManager WaveManager;
-	TUpgradeManager UpgradeManager; 
-	std::vector<TUpgradeManager> PlayerUpgradeManagers; 
+	TUpgradeManager UpgradeManager;
+	std::vector<TUpgradeManager> PlayerUpgradeManagers;
 	TGameSpawner Spawner;
 
-	
-	std::vector<std::vector<TUpgrade>> PlayerAvailableUpgrades; 
-	std::vector<bool> PlayerWaitingForUpgradeChoice; 
+	std::vector<std::vector<TUpgrade>> PlayerAvailableUpgrades;
+	std::vector<bool> PlayerWaitingForUpgradeChoice;
 	std::vector<int> PlayerPendingUpgradeChoices;
 	int LastProcessedWaveCompletion;
-	
-	
-	std::vector<TUpgrade> AvailableUpgrades; 
-	bool WaitingForUpgradeChoice; 
 
-	
+	std::vector<TUpgrade> AvailableUpgrades;
+	bool WaitingForUpgradeChoice;
+
 	float GroundExpSpawnTimer;
-	static constexpr float GroundExpSpawnInterval = 2.0f; 
+	static constexpr float GroundExpSpawnInterval = 2.0f;
 
-	
 	float LevelUpNotificationTimer;
 	int LastPlayerLevel;
 
-	
 	float ScreenWidth;
 	float ScreenHeight;
-	int LastBossWave; 
-	int BossAppearanceCount; 
+	int LastBossWave;
+	int BossAppearanceCount;
 	int LastRegenWave;
 	uint32_t NextEnemyNetInstanceId = 1;
 	uint32_t NextExpOrbNetInstanceId = 1;
@@ -101,32 +95,29 @@ private:
 	void EnsureUpgradeChoicePresented(uint8_t playerID);
 	bool IsAnyPlayerPendingUpgradeChoices() const;
 	void UpdateCollisions();
-	void SpawnEnemy(); 
-	void SpawnBoss(); 
+	void SpawnEnemy();
+	void SpawnBoss();
 
 public:
-	
+
 	TGamePlayer* GetPlayer(uint8_t playerID);
 	const TGamePlayer* GetPlayer(uint8_t playerID) const;
 	TGamePlayer* GetLocalPlayer();
 	const TGamePlayer* GetLocalPlayer() const;
 	TGameWorld();
 	void Reset();
-	
-	
+
 	void InitializeNetworkGame(uint8_t localPlayerID, bool isServer);
 	void LeaveNetworkMatchAndReset();
-	void SetPlayerCount(uint8_t count); 
-	
+	void SetPlayerCount(uint8_t count);
+
 	void Update(float deltaTime, const TInputState &input, int canvasWidth, int canvasHeight);
-	void Update(float deltaTime, const std::vector<TInputState> &inputs, int canvasWidth, int canvasHeight); 
+	void Update(float deltaTime, const std::vector<TInputState> &inputs, int canvasWidth, int canvasHeight);
 	void RenderScene(TCanvas *canvas);
 
-	
 	EWorldState GetState() const { return WorldState; }
 	const TGameStats &GetStats() const { return Stats; }
-	
-	
+
 	float GetPlayerHealthRatio() const;
 	int GetPlayerHealth() const;
 	int GetPlayerMaxHealth() const;
@@ -135,8 +126,7 @@ public:
 	int GetPlayerExperienceToNext() const;
 	int GetPlayerLevel() const;
 	bool IsPlayerAlive() const;
-	
-	
+
 	float GetPlayerHealthRatio(uint8_t playerID) const;
 	int GetPlayerHealth(uint8_t playerID) const;
 	int GetPlayerMaxHealth(uint8_t playerID) const;
@@ -145,7 +135,7 @@ public:
 	int GetPlayerExperienceToNext(uint8_t playerID) const;
 	int GetPlayerLevel(uint8_t playerID) const;
 	bool IsPlayerAlive(uint8_t playerID) const;
-	
+
 	TPointF GetCameraPosition() const { return Camera.GetBasePosition(); }
 	const TWaveManager &GetWaveManager() const { return WaveManager; }
 	const TUpgradeManager &GetUpgradeManager() const { return UpgradeManager; }
@@ -153,7 +143,7 @@ public:
 	bool IsWaitingForUpgradeChoice() const;
 	bool IsPlayerWaitingForUpgradeChoice(uint8_t playerID) const;
 	const std::vector<TUpgrade> &GetAvailableUpgradesForPlayer(uint8_t playerID) const;
-	void SelectUpgrade(int index, uint8_t playerID = 0); 
+	void SelectUpgrade(int index, uint8_t playerID = 0);
 	float GetLevelUpNotificationTimer() const { return LevelUpNotificationTimer; }
 	int GetLastPlayerLevel() const { return LastPlayerLevel; }
 	TPlayerStats GetPlayerStats() const;
@@ -163,23 +153,20 @@ public:
 	int GetBossHealth() const;
 	int GetBossMaxHealth() const;
 	uint8_t GetBossPhase() const;
-	
-	
+
 	void AddCameraShake(float intensity, float duration);
 	float GetPrimaryFireCooldown() const;
 	float GetAltFireCooldown() const;
 	float GetPrimaryFireMaxCooldown() const;
 	float GetAltFireMaxCooldown() const;
-	
-	
+
 	TPointF GetPlayerPosition() const;
 	TPointF GetPlayerPosition(uint8_t playerID) const;
 	std::vector<TPointF> GetEnemyPositions() const;
 	TPointF GetBossPosition() const;
 	bool HasActiveBoss() const { return Boss != nullptr && Boss->IsAlive(); }
 	float GetPlayerSpeedMultiplier(uint8_t playerID) const;
-	
-	
+
 	uint8_t GetLocalPlayerID() const { return LocalPlayerID; }
 	uint8_t GetPlayerCount() const { return static_cast<uint8_t>(Players.size()); }
 	bool IsNetworkGameActive() const { return IsNetworkGame; }
@@ -189,11 +176,10 @@ public:
 	void CycleSpectateTarget(int direction);
 	void EnsureValidSpectateTarget();
 	void TrySetNetworkClientGameOverIfAllDead();
-	
-	
+
 	struct TGameStateSnapshot
 	{
-		uint32_t Tick; 
+		uint32_t Tick;
 		uint32_t WaveNumber;
 		uint32_t EnemiesAlive;
 		struct TPlayerState
@@ -207,17 +193,17 @@ public:
 			bool IsAlive;
 		};
 		std::vector<TPlayerState> Players;
-		
+
 		struct TEnemyState
 		{
-			uint8_t Type; 
+			uint8_t Type;
 			float PositionX, PositionY;
 			int32_t Health;
 			bool IsAlive;
 			uint32_t NetInstanceId;
 		};
 		std::vector<TEnemyState> Enemies;
-		
+
 		struct TBulletState
 		{
 			float PositionX, PositionY;
@@ -225,7 +211,7 @@ public:
 			bool IsPlayerBullet;
 		};
 		std::vector<TBulletState> Bullets;
-		
+
 		struct TBossState
 		{
 			float PositionX, PositionY;
@@ -235,7 +221,7 @@ public:
 		};
 		TBossState Boss;
 	};
-	
+
 	TGameStateSnapshot GetGameStateSnapshot() const;
 	void ApplyGameStateSnapshot(const TGameStateSnapshot &snapshot, float interpolationFactor = 0.0f);
 	void ApplyEnemyUpdates(const std::vector<NeonGame::TEnemyUpdatePacket> &updates);
@@ -252,7 +238,4 @@ public:
 	TEnemy* GetEnemyBySlot(size_t index);
 };
 
-
 #endif
-
-

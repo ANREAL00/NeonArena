@@ -2,7 +2,7 @@
 #pragma hdrstop
 
 #include "GamePlayer.h"
-#include "GameConstants.h"
+#include "core\GameConstants.h"
 #include <Windows.h>
 #include <algorithm>
 #include <cmath>
@@ -36,12 +36,11 @@ void TGamePlayer::ApplySpeedMultiplier(float multiplier)
 	speed = GetBaseSpeed() * multiplier;
 }
 
-
 void TGamePlayer::ApplyMaxHealthBonus(int bonus)
 {
 	const int oldMaxHealth = maxHealth;
-	maxHealth = 100 + bonus; 
-	
+	maxHealth = 100 + bonus;
+
 	if (oldMaxHealth > 0)
 	{
 		const float healthRatio = static_cast<float>(health) / static_cast<float>(oldMaxHealth);
@@ -49,7 +48,7 @@ void TGamePlayer::ApplyMaxHealthBonus(int bonus)
 	}
 	else
 	{
-		health = maxHealth; 
+		health = maxHealth;
 	}
 }
 
@@ -70,7 +69,7 @@ void TGamePlayer::Update(float deltaTime, const TRectF &bounds)
 		if (hitInvulnTimer < 0.0f)
 			hitInvulnTimer = 0.0f;
 	}
-	
+
 	if (levelUpInvulnTimer > 0.0f)
 	{
 		levelUpInvulnTimer -= deltaTime;
@@ -325,7 +324,7 @@ bool TGamePlayer::CheckLevelUp()
 		experienceToNextLevel = static_cast<int>(100 + (level - 1) * 50 + (level - 1) * (level - 1) * 10);
 
 		Heal(20);
-		
+
 		levelUpInvulnTimer = 5.0f;
 
 		return true;

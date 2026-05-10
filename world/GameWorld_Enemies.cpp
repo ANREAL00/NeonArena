@@ -21,8 +21,6 @@ void TGameWorld::UpdateEnemies(float deltaTime)
 		TGamePlayer* targetPlayer = GetLocalPlayer();
 		TPointF playerPos = targetPlayer ? targetPlayer->GetPosition() : TPointF(WorldWidth / 2.0f, WorldHeight / 2.0f);
 
-		
-		
 		if (IsNetworkGame && IsServer)
 		{
 			TGamePlayer* bestPlayer = nullptr;
@@ -38,7 +36,7 @@ void TGameWorld::UpdateEnemies(float deltaTime)
 				const float dx = pp.X - enemyPos.X;
 				const float dy = pp.Y - enemyPos.Y;
 				const float d2 = dx * dx + dy * dy;
-				
+
 				if (!bestPlayer || d2 < bestDistSq - 1.0e-3f || (std::fabs(d2 - bestDistSq) <= 1.0e-3f && i < bestPlayerIdx))
 				{
 					bestDistSq = d2;
@@ -156,4 +154,3 @@ void TGameWorld::UpdateEnemies(float deltaTime)
 		}
 	}
 }
-

@@ -165,8 +165,6 @@ void TGameWorld::UpdateBoss(float deltaTime)
 {
 	TGamePlayer* targetPlayer = GetLocalPlayer();
 
-	
-	
 	if (IsNetworkGame && IsServer)
 	{
 		TGamePlayer* bestPlayer = nullptr;
@@ -227,4 +225,3 @@ void TGameWorld::UpdateBoss(float deltaTime)
 		Stats.EnemiesDefeated++;
 	}
 }
-

@@ -85,9 +85,6 @@ void TGameWorld::ApplyEnemyUpdates(const std::vector<TEnemyUpdatePacket> &update
 		Enemies[enemyID]->SetHealth(update.Health);
 	}
 
-	
-	
-
 	if (Enemies.size() != slotCount)
 	{
 		Enemies.resize(slotCount);
@@ -98,7 +95,6 @@ size_t TGameWorld::GetEnemySlotCount() const
 {
 	return Enemies.size();
 }
-
 
 TEnemy* TGameWorld::GetEnemyBySlot(size_t index)
 {

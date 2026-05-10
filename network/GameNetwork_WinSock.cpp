@@ -21,19 +21,19 @@ bool& NetLogEnabled()
 	return enabled;
 }
 
+static CRITICAL_SECTION s_NetLogCs;
+
+static BOOL CALLBACK InitNetLogCs(PINIT_ONCE, PVOID, PVOID*)
+{
+	InitializeCriticalSection(&s_NetLogCs);
+	return TRUE;
+}
+
 CRITICAL_SECTION& NetLogCs()
 {
 	static INIT_ONCE once = INIT_ONCE_STATIC_INIT;
-	static CRITICAL_SECTION cs;
-	InitOnceExecuteOnce(
-		&once,
-		[](PINIT_ONCE, PVOID, PVOID*) -> BOOL {
-			InitializeCriticalSection(&cs);
-			return TRUE;
-		},
-		nullptr,
-		nullptr);
-	return cs;
+	InitOnceExecuteOnce(&once, InitNetLogCs, nullptr, nullptr);
+	return s_NetLogCs;
 }
 
 void NetLogAppendLine(const char* line)
@@ -90,7 +90,6 @@ void NetLogWrite(const char* fmt, ...)
 	va_end(args);
 }
 
-
 bool WaitTcpConnectReady(SOCKET s, int timeoutMs)
 {
 	fd_set writeFds;
@@ -115,15 +114,15 @@ bool WaitTcpConnectReady(SOCKET s, int timeoutMs)
 	return soError == 0;
 }
 
-constexpr size_t kWireHeaderBytes = 2 + 2 + 4 + 4; 
-constexpr size_t kMaxPacketPayloadBytes = 64 * 1024; 
+constexpr size_t kWireHeaderBytes = 2 + 2 + 4 + 4;
+constexpr uint16_t kMaxPacketPayloadBytes = 60 * 1024;
 
 struct TRecvState
 {
 	std::vector<uint8_t> Buffer;
 	size_t ReadPos = 0;
 	bool PeerClosed = false;
-	int HardError = 0; 
+	int HardError = 0;
 };
 
 struct TSendState
@@ -162,11 +161,10 @@ bool IsSocketFaulted(SOCKET s)
 
 bool ConfigureGameSocket(SOCKET s)
 {
-	
+
 	int flag = 1;
 	setsockopt(s, IPPROTO_TCP, TCP_NODELAY, reinterpret_cast<const char*>(&flag), sizeof(flag));
 
-	
 	int bufSize = 256 * 1024;
 	setsockopt(s, SOL_SOCKET, SO_SNDBUF, reinterpret_cast<const char*>(&bufSize), sizeof(bufSize));
 	setsockopt(s, SOL_SOCKET, SO_RCVBUF, reinterpret_cast<const char*>(&bufSize), sizeof(bufSize));
@@ -188,7 +186,7 @@ inline uint32_t ReadLE32(const uint8_t* p)
 
 void CompactRecvBuffer(TRecvState& st)
 {
-	
+
 	if (st.ReadPos == 0)
 		return;
 	if (st.ReadPos >= st.Buffer.size())
@@ -227,15 +225,14 @@ void FlushPendingSend(SOCKET s, TSendState& st)
 			NetLogWrite("send() hard error socket=%llu err=%d queued=%zu sentPos=%zu",
 				static_cast<unsigned long long>(s), err, st.Buffer.size(), st.SentPos);
 		}
-		
+
 		return;
 	}
 
-	
 	st.Buffer.clear();
 	st.SentPos = 0;
 }
-} 
+}
 
 namespace NeonGame
 {
@@ -298,7 +295,7 @@ bool TNetworkManager::CreateListenSocket(uint16_t port)
 		addrinfo* result = nullptr;
 		if (getaddrinfo(hostName, nullptr, &hints, &result) == 0 && result)
 		{
-			
+
 			for (addrinfo* it = result; it; it = it->ai_next)
 			{
 				if (!it->ai_addr || it->ai_addrlen < sizeof(sockaddr_in))
@@ -307,12 +304,9 @@ bool TNetworkManager::CreateListenSocket(uint16_t port)
 				sockaddr_in* addr = reinterpret_cast<sockaddr_in*>(it->ai_addr);
 				const uint32_t ipHostOrder = ntohl(addr->sin_addr.s_addr);
 
-				
 				if ((ipHostOrder & 0xFF000000u) == 0x7F000000u)
 					continue;
 
-				
-				
 				const bool is10 = (ipHostOrder & 0xFF000000u) == 0x0A000000u;
 				const bool is172 = (ipHostOrder & 0xFFF00000u) == 0xAC100000u;
 				const bool is192 = (ipHostOrder & 0xFFFF0000u) == 0xC0A80000u;
@@ -327,7 +321,6 @@ bool TNetworkManager::CreateListenSocket(uint16_t port)
 				}
 			}
 
-			
 			if (LocalIPAddress.empty())
 			{
 				sockaddr_in* addr = reinterpret_cast<sockaddr_in*>(result->ai_addr);
@@ -371,7 +364,7 @@ bool TNetworkManager::ConnectToHost(const std::string &hostIP, uint16_t port)
 			closesocket(clientSocket);
 			return false;
 		}
-		
+
 		if (!WaitTcpConnectReady(clientSocket, 10000))
 		{
 			NetLogWrite("connect timeout socket=%llu ip=%s port=%u",
@@ -432,7 +425,6 @@ bool TNetworkManager::SendPacket(void* socket, const TPacket &packet)
 	NetworkSerialization::WriteUInt32(buffer, header.Timestamp);
 	buffer.insert(buffer.end(), data.begin(), data.end());
 
-	
 	const int sent = send(s, reinterpret_cast<const char*>(buffer.data()), static_cast<int>(buffer.size()), 0);
 	if (sent == SOCKET_ERROR)
 	{
@@ -443,14 +435,14 @@ bool TNetworkManager::SendPacket(void* socket, const TPacket &packet)
 				static_cast<unsigned long long>(s), static_cast<unsigned>(header.Type), buffer.size(), err);
 			return false;
 		}
-		
+
 		sendState.Buffer.insert(sendState.Buffer.end(), buffer.begin(), buffer.end());
 		sendState.SentPos = 0;
 		sendState.TotalQueuedBytes += buffer.size();
 	}
 	else if (sent < static_cast<int>(buffer.size()))
 	{
-		
+
 		sendState.Buffer.insert(sendState.Buffer.end(), buffer.begin() + sent, buffer.end());
 		sendState.SentPos = 0;
 		sendState.TotalQueuedBytes += (buffer.size() - static_cast<size_t>(sent));
@@ -477,7 +469,6 @@ std::unique_ptr<TPacket> TNetworkManager::ReceivePacket(void* socket)
 	static uint64_t recvBytes = 0;
 	static uint64_t parsedPackets = 0;
 
-	
 	for (;;)
 	{
 		uint8_t temp[4096];
@@ -490,13 +481,12 @@ std::unique_ptr<TPacket> TNetworkManager::ReceivePacket(void* socket)
 		}
 		if (received == 0)
 		{
-			
+
 			NetLogWrite("recv() closed by peer socket=%llu", static_cast<unsigned long long>(s));
 			recvState.PeerClosed = true;
 			return nullptr;
 		}
 
-		
 		const int err = WSAGetLastError();
 		if (err == WSAEWOULDBLOCK)
 			break;
@@ -647,4 +637,3 @@ bool TNetworkManager::ConsumeSocketFault(void* socket, int &outErr)
 	return true;
 }
 }
-

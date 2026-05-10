@@ -2,7 +2,7 @@
 #pragma hdrstop
 
 #include "GameEnemy.h"
-#include "GameConstants.h"
+#include "core\GameConstants.h"
 #include "GameProjectile.h"
 #include <cmath>
 #include <vector>
@@ -14,19 +14,19 @@ TBossEnemy::TBossEnemy(const TPointF &spawnPos, int appearanceLevel)
 {
 	position = spawnPos;
 	this->appearanceLevel = appearanceLevel;
-	
+
 	baseSpeed = 50.0f;
 	baseHealth = 1000;
 	baseShootCooldown = 1.5f;
-	
+
 	const float healthMultiplier = 1.0f + (appearanceLevel * 0.30f);
 	const float speedMultiplier = 1.0f + (appearanceLevel * 0.10f);
-	const float shootSpeedMultiplier = 1.0f - (appearanceLevel * 0.15f); 
-	const float shootSpeedFinal = std::max(0.1f, baseShootCooldown * shootSpeedMultiplier); 
-	
+	const float shootSpeedMultiplier = 1.0f - (appearanceLevel * 0.15f);
+	const float shootSpeedFinal = std::max(0.1f, baseShootCooldown * shootSpeedMultiplier);
+
 	baseHealth = static_cast<int>(baseHealth * healthMultiplier);
 	baseSpeed = baseSpeed * speedMultiplier;
-	
+
 	speed = baseSpeed;
 	scaledBaseSpeed = baseSpeed;
 	health = baseHealth;
@@ -42,40 +42,40 @@ TBossEnemy::TBossEnemy(const TPointF &spawnPos, int appearanceLevel)
 
 void TBossEnemy::UpdatePhase(float deltaTime, const TPointF &playerPos)
 {
-	
+
 	const float healthRatio = static_cast<float>(health) / static_cast<float>(maxHealth);
-	
+
 	if (healthRatio > 0.80f && currentPhase != EBossPhase::Phase1)
 	{
 		currentPhase = EBossPhase::Phase1;
-		phaseTransitionTimer = 1.0f; 
-		shootCooldown = baseShootCooldown * 0.9f; 
+		phaseTransitionTimer = 1.0f;
+		shootCooldown = baseShootCooldown * 0.9f;
 	}
 	else if (healthRatio > 0.60f && healthRatio <= 0.80f && currentPhase != EBossPhase::Phase2)
 	{
 		currentPhase = EBossPhase::Phase2;
 		phaseTransitionTimer = 1.0f;
-		shootCooldown = baseShootCooldown * 0.75f; 
+		shootCooldown = baseShootCooldown * 0.75f;
 	}
 	else if (healthRatio > 0.40f && healthRatio <= 0.60f && currentPhase != EBossPhase::Phase3)
 	{
 		currentPhase = EBossPhase::Phase3;
 		phaseTransitionTimer = 1.0f;
-		shootCooldown = baseShootCooldown * 0.6f; 
+		shootCooldown = baseShootCooldown * 0.6f;
 	}
 	else if (healthRatio > 0.20f && healthRatio <= 0.40f && currentPhase != EBossPhase::Phase4)
 	{
 		currentPhase = EBossPhase::Phase4;
 		phaseTransitionTimer = 1.0f;
-		shootCooldown = baseShootCooldown * 0.5f; 
+		shootCooldown = baseShootCooldown * 0.5f;
 	}
 	else if (healthRatio <= 0.20f && currentPhase != EBossPhase::Phase5)
 	{
 		currentPhase = EBossPhase::Phase5;
 		phaseTransitionTimer = 1.0f;
-		shootCooldown = baseShootCooldown * 0.35f; 
+		shootCooldown = baseShootCooldown * 0.35f;
 	}
-	
+
 	if (phaseTransitionTimer > 0.0f)
 		phaseTransitionTimer -= deltaTime;
 }
@@ -83,11 +83,11 @@ void TBossEnemy::UpdatePhase(float deltaTime, const TPointF &playerPos)
 void TBossEnemy::CreateBullets(const TPointF &playerPos, std::vector<TBullet> &bullets, float damageMultiplier)
 {
 	if (phaseTransitionTimer > 0.0f)
-		return; 
-	
+		return;
+
 	if (shootTimer > 0.0f)
-		return; 
-		
+		return;
+
 	switch (currentPhase)
 	{
 		case EBossPhase::Phase1:
@@ -106,41 +106,41 @@ void TBossEnemy::CreateBullets(const TPointF &playerPos, std::vector<TBullet> &b
 			ShootAggressivePattern(playerPos, bullets, damageMultiplier);
 			break;
 	}
-	
-	shootTimer = shootCooldown; 
+
+	shootTimer = shootCooldown;
 }
 
 void TBossEnemy::Update(float deltaTime, const TPointF &playerPos)
 {
 	UpdatePhase(deltaTime, playerPos);
-	
+
 	if (stunTimer > 0.0f)
 	{
 		stunTimer -= deltaTime;
 		if (stunTimer < 0.0f)
 			stunTimer = 0.0f;
 	}
-	
+
 	shootTimer -= deltaTime;
 	movementTimer += deltaTime;
-	
+
 	if (stunTimer > 0.0f)
 	{
 		return;
 	}
-	
+
 	if (currentPhase == EBossPhase::Phase3)
 	{
-		
+
 		const float circleRadius = 200.0f;
 		const float circleSpeed = 0.5f;
 		const float angle = movementTimer * circleSpeed;
-		
+
 		TPointF offset(std::cos(angle) * circleRadius, std::sin(angle) * circleRadius);
 		TPointF targetPos = playerPos;
 		targetPos.X += offset.X;
 		targetPos.Y += offset.Y;
-		
+
 		TPointF dir(targetPos.X - position.X, targetPos.Y - position.Y);
 		const float len = std::sqrt(dir.X * dir.X + dir.Y * dir.Y);
 		if (len > 0.001f)
@@ -153,16 +153,16 @@ void TBossEnemy::Update(float deltaTime, const TPointF &playerPos)
 	}
 	else if (currentPhase == EBossPhase::Phase4)
 	{
-		
+
 		const float zigzagAmplitude = 100.0f;
 		const float zigzagSpeed = 2.0f;
 		const float zigzagOffset = std::sin(movementTimer * zigzagSpeed) * zigzagAmplitude;
-		
+
 		TPointF dir(playerPos.X - position.X, playerPos.Y - position.Y);
 		const float len = std::sqrt(dir.X * dir.X + dir.Y * dir.Y);
 		if (len > 0.001f)
 		{
-			
+
 			TPointF perp(-dir.Y, dir.X);
 			const float perpLen = std::sqrt(perp.X * perp.X + perp.Y * perp.Y);
 			if (perpLen > 0.001f)
@@ -170,45 +170,45 @@ void TBossEnemy::Update(float deltaTime, const TPointF &playerPos)
 				perp.X /= perpLen;
 				perp.Y /= perpLen;
 			}
-			
+
 			dir.X /= len;
 			dir.Y /= len;
-			
+
 			TPointF moveDir(dir.X, dir.Y);
-			
+
 			if (len > 50.0f)
 			{
 				moveDir.X += perp.X * (zigzagOffset / len);
 				moveDir.Y += perp.Y * (zigzagOffset / len);
 			}
-			
+
 			const float moveLen = std::sqrt(moveDir.X * moveDir.X + moveDir.Y * moveDir.Y);
 			if (moveLen > 0.001f)
 			{
 				moveDir.X /= moveLen;
 				moveDir.Y /= moveLen;
 			}
-			
-			position.X += moveDir.X * speed * 1.2f * deltaTime; 
+
+			position.X += moveDir.X * speed * 1.2f * deltaTime;
 			position.Y += moveDir.Y * speed * 1.2f * deltaTime;
 		}
 	}
 	else if (currentPhase == EBossPhase::Phase5)
 	{
-		
+
 		TPointF dir(playerPos.X - position.X, playerPos.Y - position.Y);
 		const float len = std::sqrt(dir.X * dir.X + dir.Y * dir.Y);
 		if (len > 0.001f)
 		{
 			dir.X /= len;
 			dir.Y /= len;
-			position.X += dir.X * speed * 1.8f * deltaTime; 
+			position.X += dir.X * speed * 1.8f * deltaTime;
 			position.Y += dir.Y * speed * 1.8f * deltaTime;
 		}
 	}
 	else
 	{
-		
+
 		TPointF dir(playerPos.X - position.X, playerPos.Y - position.Y);
 		const float len = std::sqrt(dir.X * dir.X + dir.Y * dir.Y);
 		if (len > 0.001f)
@@ -237,7 +237,7 @@ float TBossEnemy::GetHealthRatio() const
 
 void TBossEnemy::ApplyTemporarySpeedMultiplier(float multiplier)
 {
-	
+
 	float phaseMultiplier = 1.0f;
 	if (currentPhase == EBossPhase::Phase3)
 	{
@@ -245,13 +245,13 @@ void TBossEnemy::ApplyTemporarySpeedMultiplier(float multiplier)
 	}
 	else if (currentPhase == EBossPhase::Phase4)
 	{
-		phaseMultiplier = 1.2f; 
+		phaseMultiplier = 1.2f;
 	}
 	else if (currentPhase == EBossPhase::Phase5)
 	{
-		phaseMultiplier = 1.8f; 
+		phaseMultiplier = 1.8f;
 	}
-	
+
 	speed = scaledBaseSpeed * phaseMultiplier * multiplier;
 }
 

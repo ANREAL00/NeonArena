@@ -29,7 +29,7 @@ struct TInputState
 		  AimWorldY(0.0f)
 	{
 	}
-	
+
 	void Reset()
 	{
 		MoveUp = false;

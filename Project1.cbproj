@@ -1,4 +1,4 @@
-<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
         <ProjectGuid>{D7F3E209-0073-4EEA-B0D2-A4BC0E46ADB7}</ProjectGuid>
         <ProjectVersion>20.1</ProjectVersion>
@@ -217,19 +217,25 @@
             <Form>Form1</Form>
             <FormType>dfm</FormType>
             <DependentOn>MainForm.h</DependentOn>
-            <BuildOrder>15</BuildOrder>
+            <BuildOrder>51</BuildOrder>
         </CppCompile>
         <CppCompile Include="MainForm_GameLoop.cpp">
-            <DependentOn>MainForm.h</DependentOn>
-            <BuildOrder>15</BuildOrder>
+            <BuildOrder>51</BuildOrder>
         </CppCompile>
         <CppCompile Include="MainForm_Input.cpp">
-            <DependentOn>MainForm.h</DependentOn>
-            <BuildOrder>15</BuildOrder>
+            <BuildOrder>51</BuildOrder>
         </CppCompile>
-        <CppCompile Include="MainForm_Network.cpp">
-            <DependentOn>MainForm.h</DependentOn>
-            <BuildOrder>15</BuildOrder>
+        <CppCompile Include="MainForm_Mouse.cpp">
+            <BuildOrder>51</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="MainForm_NetBroadcast.cpp">
+            <BuildOrder>51</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="MainForm_NetInterp.cpp">
+            <BuildOrder>51</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="MainForm_NetReceive.cpp">
+            <BuildOrder>51</BuildOrder>
         </CppCompile>
         <CppCompile Include="network\GameNetwork_Client.cpp">
             <DependentOn>network\GameNetwork.h</DependentOn>
@@ -244,6 +250,10 @@
             <BuildOrder>15</BuildOrder>
         </CppCompile>
         <CppCompile Include="network\GameNetwork_Packets.cpp">
+            <DependentOn>network\GameNetwork.h</DependentOn>
+            <BuildOrder>15</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="network\GameNetwork_Packets_Extra.cpp">
             <DependentOn>network\GameNetwork.h</DependentOn>
             <BuildOrder>15</BuildOrder>
         </CppCompile>
@@ -290,9 +300,17 @@
             <DependentOn>systems\GameUpgrade.h</DependentOn>
             <BuildOrder>12</BuildOrder>
         </CppCompile>
+        <CppCompile Include="systems\GameUpgrade_Factory.cpp">
+            <DependentOn>systems\GameUpgrade.h</DependentOn>
+            <BuildOrder>15</BuildOrder>
+        </CppCompile>
         <CppCompile Include="systems\WaveManager.cpp">
             <DependentOn>systems\WaveManager.h</DependentOn>
             <BuildOrder>8</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="ui\GameUIRenderer_CoopMenu.cpp">
+            <DependentOn>ui\GameUIRenderer.h</DependentOn>
+            <BuildOrder>15</BuildOrder>
         </CppCompile>
         <CppCompile Include="ui\GameUIRenderer_Hud.cpp">
             <DependentOn>ui\GameUIRenderer.h</DependentOn>
@@ -307,6 +325,10 @@
             <BuildOrder>15</BuildOrder>
         </CppCompile>
         <CppCompile Include="ui\GameUIRenderer_Overlays.cpp">
+            <DependentOn>ui\GameUIRenderer.h</DependentOn>
+            <BuildOrder>15</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="ui\GameUIRenderer_Upgrade.cpp">
             <DependentOn>ui\GameUIRenderer.h</DependentOn>
             <BuildOrder>15</BuildOrder>
         </CppCompile>
@@ -334,11 +356,11 @@
             <DependentOn>world\GameWorld.h</DependentOn>
             <BuildOrder>13</BuildOrder>
         </CppCompile>
-        <CppCompile Include="world\GameWorld_NetworkSync.cpp">
+        <CppCompile Include="world\GameWorld_NetworkEnemies.cpp">
             <DependentOn>world\GameWorld.h</DependentOn>
             <BuildOrder>13</BuildOrder>
         </CppCompile>
-        <CppCompile Include="world\GameWorld_NetworkEnemies.cpp">
+        <CppCompile Include="world\GameWorld_NetworkSync.cpp">
             <DependentOn>world\GameWorld.h</DependentOn>
             <BuildOrder>13</BuildOrder>
         </CppCompile>
@@ -353,6 +375,10 @@
         <CppCompile Include="world\GameWorld_Spawning.cpp">
             <DependentOn>world\GameWorld.h</DependentOn>
             <BuildOrder>13</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="world\GameWorld_Update.cpp">
+            <DependentOn>world\GameWorld.h</DependentOn>
+            <BuildOrder>15</BuildOrder>
         </CppCompile>
         <CppCompile Include="world\GameWorld_Upgrades.cpp">
             <DependentOn>world\GameWorld.h</DependentOn>

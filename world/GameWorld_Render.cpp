@@ -223,7 +223,7 @@ namespace
 
 			if (b.IsPlayerBullet)
 			{
-				
+
 				const float trailX = screenX - 10.0f;
 				const float trailY = screenY;
 				canvas->Pen->Color = static_cast<TColor>(RGB(255, 120, 220));
@@ -301,4 +301,3 @@ void TGameWorld::RenderScene(TCanvas *canvas)
 	DrawBoss(canvas, camera, Boss);
 	DrawPlayers(canvas, camera, Players);
 }
-

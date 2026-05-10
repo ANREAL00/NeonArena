@@ -1,9 +1,7 @@
 
 
-
 #ifndef WaveManagerH
 #define WaveManagerH
-
 
 #include <System.Types.hpp>
 #include <vector>
@@ -11,26 +9,23 @@
 
 class TEnemy;
 
-
 enum class EWaveState
 {
-	Waiting,      
-	Spawning,     
-	Active,       
-	Completed     
+	Waiting,
+	Spawning,
+	Active,
+	Completed
 };
-
 
 struct TWaveConfig
 {
 	int WaveNumber;
 	int TotalEnemies;
 	int EnemiesSpawned;
-	float SpawnInterval;      
-	float TimeUntilNextSpawn; 
-	float WaveStartDelay;     
+	float SpawnInterval;
+	float TimeUntilNextSpawn;
+	float WaveStartDelay;
 };
-
 
 class TWaveManager
 {
@@ -38,15 +33,14 @@ private:
 	int CurrentWave;
 	EWaveState WaveState;
 	TWaveConfig CurrentWaveConfig;
-	float WaveCooldownTimer;  
-	float WaveActiveDuration; 
-	float SpeedMultiplier;    
-	float DamageMultiplier;   
+	float WaveCooldownTimer;
+	float WaveActiveDuration;
+	float SpeedMultiplier;
+	float DamageMultiplier;
 	float IntermissionSeconds;
-	static constexpr float WaveDurationThreshold = 15.0f; 
-	static constexpr float MultiplierGrowthRate = 0.02f;  
+	static constexpr float WaveDurationThreshold = 15.0f;
+	static constexpr float MultiplierGrowthRate = 0.02f;
 
-	
 	void CalculateWaveConfig(int waveNumber, TWaveConfig &config);
 
 public:
@@ -60,7 +54,6 @@ public:
 	float GetCooldownTimer() const { return WaveCooldownTimer; }
 	void ApplyNetworkState(int waveNumber, uint8_t waveState, float cooldownRemaining);
 
-	
 	int GetCurrentWave() const { return CurrentWave; }
 	EWaveState GetState() const { return WaveState; }
 	const TWaveConfig &GetConfig() const { return CurrentWaveConfig; }
@@ -69,7 +62,4 @@ public:
 	float GetDamageMultiplier() const { return DamageMultiplier; }
 };
 
-
 #endif
-
-
